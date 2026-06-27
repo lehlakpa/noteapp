@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'circular_loading.dart';
+import 'login_screen.dart';
 import '../services/auth_service.dart';
 import '../widgets/custom_notification.dart';
 
@@ -144,6 +145,15 @@ class _LogoutProfileActionState extends State<LogoutProfileAction> {
                                   context,
                                   message: 'Logged out successfully',
                                   isError: false,
+                                );
+
+                                // Redirect to LoginScreen and clear all routes
+                                if (!mounted) return;
+                                Navigator.of(context).pushAndRemoveUntil(
+                                  MaterialPageRoute(
+                                    builder: (_) => const LoginScreen(),
+                                  ),
+                                  (route) => false,
                                 );
                               } catch (e) {
                                 if (!mounted) return;

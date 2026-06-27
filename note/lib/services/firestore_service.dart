@@ -29,4 +29,16 @@ class FirestoreService {
   }) async {
     await _db.collection('notes').doc(noteId).update({'isPinned': isPinned});
   }
+
+  Future<void> deleteNote(String noteId) async {
+    await _db.collection('notes').doc(noteId).delete();
+  }
+
+  Future<void> updateNote(Note note) async {
+    await _db.collection('notes').doc(note.id).update({
+      'title': note.title,
+      'content': note.content,
+      'colorIndex': note.colorIndex,
+    });
+  }
 }
