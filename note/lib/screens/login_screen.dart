@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:note/screens/register_screen.dart';
 import 'package:note/screens/home_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../widgets/custom_notification.dart';
 import '../constants/app_colors.dart';
@@ -19,7 +20,10 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _isLoading = false;
 
   Future<void> _login() async {
-    if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
+
+    if (email.isEmpty || password.isEmpty) {
       if (!mounted) return;
       CustomNotification.show(
         context,
@@ -31,10 +35,46 @@ class _LoginScreenState extends State<LoginScreen> {
 
     setState(() => _isLoading = true);
     try {
+      final prefs = await SharedPreferences.getInstance();
+      final blockKey = 'block_until_$email';
+      final attemptsKey = 'login_attempts_$email';
+
+      final blockUntilStr = prefs.getString(blockKey);
+      if (blockUntilStr != null) {
+        if (blockUntilStr == 'permanent') {
+          if (!mounted) return;
+          CustomNotification.show(
+            context,
+            message: 'Account locked permanently. Too many wrong passwords.',
+            isError: true,
+          );
+          setState(() => _isLoading = false);
+          return;
+        }
+
+        final blockUntil = DateTime.parse(blockUntilStr);
+        if (DateTime.now().isBefore(blockUntil)) {
+          final diff = blockUntil.difference(DateTime.now()).inMinutes;
+          if (!mounted) return;
+          CustomNotification.show(
+            context,
+            message: 'Account locked. Please wait ${diff + 1} minutes.',
+            isError: true,
+          );
+          setState(() => _isLoading = false);
+          return;
+        } else {
+          await prefs.remove(blockKey);
+        }
+      }
+
       await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: _emailController.text.trim(),
-        password: _passwordController.text.trim(),
+        email: email,
+        password: password,
       );
+
+      await prefs.remove(blockKey);
+      await prefs.remove(attemptsKey);
 
       if (!mounted) return;
       CustomNotification.show(
@@ -43,7 +83,6 @@ class _LoginScreenState extends State<LoginScreen> {
         isError: false,
       );
 
-      // Navigate to HomeScreen and clear the entire back stack
       if (!mounted) return;
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (_) => const HomeScreen()),
@@ -51,11 +90,62 @@ class _LoginScreenState extends State<LoginScreen> {
       );
     } on FirebaseAuthException catch (e) {
       if (!mounted) return;
-      CustomNotification.show(
-        context,
-        message: e.message ?? 'Login failed',
-        isError: true,
-      );
+
+      if (e.code == 'wrong-password' || e.code == 'invalid-credential') {
+        final prefs = await SharedPreferences.getInstance();
+        final email = _emailController.text.trim();
+        final blockKey = 'block_until_$email';
+        final attemptsKey = 'login_attempts_$email';
+
+        int attempts = (prefs.getInt(attemptsKey) ?? 0) + 1;
+        await prefs.setInt(attemptsKey, attempts);
+
+        if (attempts >= 6) {
+          await prefs.setString(blockKey, 'permanent');
+          if (!mounted) return;
+          CustomNotification.show(
+            context,
+            message: 'Account locked permanently. Too many wrong passwords.',
+            isError: true,
+          );
+        } else if (attempts == 5) {
+          await prefs.setString(
+            blockKey,
+            DateTime.now().add(const Duration(minutes: 15)).toIso8601String(),
+          );
+          if (!mounted) return;
+          CustomNotification.show(
+            context,
+            message: 'Incorrect password 5 times. Please wait 15 minutes.',
+            isError: true,
+          );
+        } else if (attempts == 3) {
+          await prefs.setString(
+            blockKey,
+            DateTime.now().add(const Duration(minutes: 5)).toIso8601String(),
+          );
+          if (!mounted) return;
+          CustomNotification.show(
+            context,
+            message: 'Invalid email or password. $attempts of 3 attempts used.',
+            isError: true,
+          );
+        } else {
+          if (!mounted) return;
+          CustomNotification.show(
+            context,
+            message: 'Invalid email or password. $attempts of 6 attempts used.',
+            isError: true,
+          );
+        }
+      } else {
+        if (!mounted) return;
+        CustomNotification.show(
+          context,
+          message: e.message ?? 'Login failed',
+          isError: true,
+        );
+      }
     } catch (e) {
       if (!mounted) return;
       CustomNotification.show(
@@ -83,10 +173,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 padding: const EdgeInsets.all(24),
                 child: Column(
                   children: [
-                    Icon(
-                      Icons.account_balance_wallet_rounded,
-                      size: 80,
-                      color: AppColors.blue,
+                    Image.asset(
+                      "assets/images/notelogo.png",
+                      height: 100,
+                      width: 100,
                     ),
                     const SizedBox(height: 8),
                     const Text(
