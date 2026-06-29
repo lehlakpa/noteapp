@@ -161,7 +161,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.lightBackground,
+      backgroundColor: AppColors.creamBackground,
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
@@ -218,7 +218,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: ElevatedButton(
                         onPressed: _isLoading ? null : _login,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.blue,
+                          backgroundColor: AppColors.primaryYellow,
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
@@ -273,7 +273,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       },
                       child: const Text(
                         "Don't have an account? Register",
-                        style: TextStyle(color: AppColors.blue),
+                        style: TextStyle(color: AppColors.primaryYellow),
                       ),
                     ),
                   ],
@@ -312,7 +312,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.blue, width: 1),
+          borderSide: const BorderSide(color: AppColors.primaryYellow, width: 1),
         ),
       ),
     );

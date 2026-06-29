@@ -63,9 +63,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor:
-          AppColors.lightBackground, // Light bluish-white background
+          AppColors.creamBackground, // Light bluish-white background
       appBar: AppBar(
-        backgroundColor: AppColors.blue,
+        backgroundColor: AppColors.primaryYellow,
         elevation: 0,
         title: Row(
           children: [
@@ -134,6 +134,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       _selectedCategory == _HomeCategory.pinned,
                       _HomeCategory.pinned,
                     ),
+                    _buildCategoryChip(
+                      'Team',
+                      _selectedCategory == _HomeCategory.shared,
+                      _HomeCategory.shared,
+                    ),
                   ],
                 ),
               ),
@@ -184,6 +189,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         final diff = now.difference(note.createdAt);
                         if (diff.inDays > 7) return false;
                       }
+                      if (_selectedCategory == _HomeCategory.shared &&
+                          !note.isTeam) {
+                        return false;
+                      }
 
                       // Search
                       if (_searchQuery.isNotEmpty) {
@@ -193,11 +202,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             .toLowerCase()
                             .contains(q);
                         if (!titleMatch && !contentMatch) return false;
-                      }
-
-                      // Shared not implemented (no field in model)
-                      if (_selectedCategory == _HomeCategory.shared) {
-                        return false;
                       }
 
                       return true;
@@ -224,24 +228,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       itemBuilder: (context, index) {
                         final note = filteredNotes[index];
 
-                        final List<Color> bgColors = [
-                          Colors.white,
-                          Colors.amber.shade100,
-                          Colors.teal.shade100,
-                          Colors.blue.shade100,
-                          Colors.purple.shade100,
-                          Colors.pink.shade100,
-                        ];
-                        final List<Color> iconColors = [
-                          Colors.grey.shade400,
-                          Colors.amber,
-                          Colors.teal,
-                          Colors.blue,
-                          Colors.purple,
-                          Colors.pink,
-                        ];
-
-                        final colorIndex = note.colorIndex.clamp(0, 5);
+                        final iconBgColor = AppColors.primaryYellow.withValues(
+                          alpha: 0.15,
+                        );
+                        final iconColor = AppColors.primaryYellow;
                         final timeString = DateFormat(
                           'dd MMM • HH:mm',
                         ).format(note.createdAt);
@@ -265,9 +255,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             title: note.title.isEmpty ? 'Untitled' : note.title,
                             content: note.content,
                             time: timeString,
-                            iconData: Icons.note,
-                            iconBgColor: bgColors[colorIndex],
-                            iconColor: iconColors[colorIndex],
+                            iconData: note.isTeam ? Icons.groups : Icons.person,
+                            iconBgColor: iconBgColor,
+                            iconColor: iconColor,
                             isPinned: note.isPinned,
                           ),
                         );
@@ -288,7 +278,7 @@ class _HomeScreenState extends State<HomeScreen> {
             MaterialPageRoute(builder: (context) => const AddNoteScreen()),
           );
         },
-        backgroundColor: AppColors.blue,
+        backgroundColor: AppColors.primaryYellow,
         elevation: 4,
 
         shape: const CircleBorder(),
@@ -305,7 +295,7 @@ class _HomeScreenState extends State<HomeScreen> {
       context: context,
       builder: (ctx) {
         return AlertDialog(
-          backgroundColor: AppColors.darkSurface,
+          backgroundColor: AppColors.white,
 
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
@@ -316,14 +306,16 @@ class _HomeScreenState extends State<HomeScreen> {
               Text(
                 'Note #$index',
                 style: const TextStyle(
-                  color: Colors.white,
+                  color: AppColors.primaryText,
                   fontSize: 15,
                   fontWeight: FontWeight.w700,
                 ),
               ),
               Icon(
                 note.isPinned ? Icons.push_pin : Icons.push_pin_outlined,
-                color: note.isPinned ? Colors.blueAccent : Colors.white54,
+                color: note.isPinned
+                    ? AppColors.primaryYellow
+                    : AppColors.mutedText,
               ),
             ],
           ),
@@ -336,7 +328,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Text(
                   title,
                   style: const TextStyle(
-                    color: Colors.white,
+                    color: AppColors.primaryText,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
@@ -344,14 +336,17 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(height: 10),
                 Text(
                   note.content.isEmpty ? 'No content' : note.content,
-                  style: const TextStyle(color: Colors.white70, fontSize: 14),
+                  style: const TextStyle(
+                    color: AppColors.mutedText,
+                    fontSize: 14,
+                  ),
                   maxLines: 8,
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 10),
                 Text(
                   'Created: ${DateFormat('dd MMM yyyy • HH:mm').format(note.createdAt)}',
-                  style: TextStyle(color: Colors.white54, fontSize: 12),
+                  style: TextStyle(color: AppColors.mutedText, fontSize: 12),
                 ),
               ],
             ),
@@ -362,7 +357,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: const Text(
                 'Close',
                 style: TextStyle(
-                  color: Colors.white54,
+                  color: AppColors.mutedText,
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -372,11 +367,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 Navigator.pop(ctx);
                 _showEditDialog(note);
               },
-              icon: const Icon(Icons.edit_outlined, color: Colors.white),
+              icon: const Icon(
+                Icons.edit_outlined,
+                color: AppColors.primaryYellow,
+              ),
               label: const Text(
                 'Edit',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: AppColors.primaryYellow,
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -433,7 +431,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Text(
             'Note #$index',
             style: const TextStyle(
-              color: AppColors.blue,
+              color: AppColors.primaryYellow,
               fontSize: 11,
 
               fontWeight: FontWeight.w800,
@@ -519,7 +517,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 bottom: MediaQuery.of(ctx).viewInsets.bottom + 24,
               ),
               decoration: const BoxDecoration(
-                color: Color(0xFF1E293B),
+                color: AppColors.white,
                 borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
               ),
               child: Column(
@@ -532,7 +530,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       width: 40,
                       height: 4,
                       decoration: BoxDecoration(
-                        color: Colors.white24,
+                        color: AppColors.mutedText,
                         borderRadius: BorderRadius.circular(2),
                       ),
                     ),
@@ -541,7 +539,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   const Text(
                     'Edit Note',
                     style: TextStyle(
-                      color: Colors.white,
+                      color: AppColors.primaryText,
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
@@ -550,12 +548,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   // Title field
                   TextField(
                     controller: titleCtrl,
-                    style: const TextStyle(color: Colors.white),
+                    style: const TextStyle(color: AppColors.primaryText),
                     decoration: InputDecoration(
                       hintText: 'Title',
-                      hintStyle: TextStyle(color: Colors.white38),
+                      hintStyle: TextStyle(color: AppColors.mutedText),
                       filled: true,
-                      fillColor: Colors.white10,
+                      fillColor: AppColors.creamBackground,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide.none,
@@ -571,12 +569,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   TextField(
                     controller: contentCtrl,
                     maxLines: 4,
-                    style: const TextStyle(color: Colors.white),
+                    style: const TextStyle(color: AppColors.primaryText),
                     decoration: InputDecoration(
                       hintText: 'Content',
-                      hintStyle: TextStyle(color: Colors.white38),
+                      hintStyle: TextStyle(color: AppColors.mutedText),
                       filled: true,
-                      fillColor: Colors.white10,
+                      fillColor: AppColors.creamBackground,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide.none,
@@ -600,7 +598,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             shape: BoxShape.circle,
                             border: Border.all(
                               color: selectedColor == i
-                                  ? Colors.blueAccent
+                                  ? AppColors.primaryYellow
                                   : Colors.transparent,
                               width: 2.5,
                             ),
@@ -610,7 +608,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Icons.check,
                                   size: 16,
                                   color: noteColors[i] == Colors.white
-                                      ? Colors.blueAccent
+                                      ? AppColors.primaryYellow
                                       : Colors.white,
                                 )
                               : null,
@@ -624,7 +622,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     width: double.infinity,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blueAccent,
+                        backgroundColor: AppColors.primaryYellow,
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
@@ -682,22 +680,22 @@ class _HomeScreenState extends State<HomeScreen> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: const Color(0xFF1E293B),
+        backgroundColor: AppColors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: Text(
           'Delete Note #$index?',
-          style: const TextStyle(color: Colors.white, fontSize: 17),
+          style: const TextStyle(color: AppColors.primaryText, fontSize: 17),
         ),
         content: const Text(
           'This action cannot be undone.',
-          style: TextStyle(color: Colors.white54),
+          style: TextStyle(color: AppColors.mutedText),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
             child: const Text(
               'Cancel',
-              style: TextStyle(color: Colors.white54),
+              style: TextStyle(color: AppColors.mutedText),
             ),
           ),
           TextButton(
@@ -749,10 +747,10 @@ class _HomeScreenState extends State<HomeScreen> {
         margin: const EdgeInsets.only(right: 10),
         padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 5),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.blue : Colors.white,
+          color: isSelected ? AppColors.primaryYellow : Colors.white,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: isSelected ? AppColors.blue : Colors.grey.shade300,
+            color: isSelected ? AppColors.primaryYellow : Colors.grey.shade300,
           ),
         ),
         child: Text(
@@ -828,14 +826,16 @@ class _HomeScreenState extends State<HomeScreen> {
                   padding: const EdgeInsets.all(6),
                   decoration: BoxDecoration(
                     color: isPinned
-                        ? AppColors.blue.withValues(alpha: 0.12)
+                        ? AppColors.primaryYellow.withValues(alpha: 0.12)
                         : Colors.transparent,
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
                     isPinned ? Icons.push_pin : Icons.push_pin_outlined,
                     size: 20,
-                    color: isPinned ? AppColors.blue : Colors.grey.shade400,
+                    color: isPinned
+                        ? AppColors.primaryYellow
+                        : Colors.grey.shade400,
                   ),
                 ),
               ),

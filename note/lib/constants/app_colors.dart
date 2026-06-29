@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 
-/// Centralized app colors (blue + white + commonly used text colors).
+/// Centralized app colors based on the new logo design.
 class AppColors {
   // Base colors
-  static const Color blue = Color(0xFF1DA1F2); // primary brand blue
-  static const Color white = Color(0xFFFFFFFF);
+  static const Color primaryYellow = Color(0xFFF9A826); // warm yellow pencil
+  static const Color white = Color(0xFFFFFFFF); // notepad white
 
   // Backgrounds / surfaces
-  static const Color lightBackground = Color(0xFFF8F9FE);
-  static const Color darkSurface = Color(0xFF1E293B);
+  static const Color creamBackground = Color(0xFFFDF7ED); // logo background
+  static const Color darkSurface = Color(0xFF2C2C2C); // dark accents
 
   // Text colors
-  static const Color primaryText = Color(0xFF0F172A);
-  static const Color mutedText = Color(0xFF64748B);
+  static const Color primaryText = Color(0xFF2C2C2C); // charcoal/black text
+  static const Color mutedText = Color(0xFF8C8C8C);
   static const Color mutedOnDarkText = Color(0xB3FFFFFF); // ~70% opacity
 
   // Convenience colors

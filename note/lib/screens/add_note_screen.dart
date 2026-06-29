@@ -5,6 +5,7 @@ import 'circular_loading.dart';
 import '../services/firestore_service.dart';
 import '../models/note_model.dart';
 import '../widgets/custom_notification.dart';
+import '../constants/app_colors.dart';
 
 class AddNoteScreen extends StatefulWidget {
   const AddNoteScreen({super.key});
@@ -18,6 +19,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
   final TextEditingController _contentController = TextEditingController();
   final FirestoreService _firestoreService = FirestoreService();
   bool _isSaving = false;
+  bool _isTeam = false;
 
   int _selectedColorIndex = 0;
 
@@ -72,6 +74,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
         colorIndex: _selectedColorIndex,
         userId: user.uid,
         createdAt: DateTime.now(),
+        isTeam: _isTeam,
       );
 
       await _firestoreService.addNote(note);
@@ -110,7 +113,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FE), // Matches Home background
+      backgroundColor: AppColors.creamBackground, // Matches Home background
       body: SafeArea(
         child: Column(
           children: [
@@ -129,7 +132,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                   ),
                   Container(
                     decoration: const BoxDecoration(
-                      color: Colors.blueAccent,
+                      color: AppColors.primaryYellow,
                       shape: BoxShape.circle,
                     ),
                     child: IconButton(
@@ -161,7 +164,40 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                 ),
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 10),
+            
+            // Team vs Single Toggle
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Row(
+                children: [
+                  ChoiceChip(
+                    label: const Text('Single'),
+                    selected: !_isTeam,
+                    onSelected: (val) => setState(() => _isTeam = false),
+                    selectedColor: AppColors.primaryYellow.withValues(alpha: 0.2),
+                    showCheckmark: false,
+                    labelStyle: TextStyle(
+                      color: !_isTeam ? AppColors.primaryYellow : AppColors.mutedText,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  ChoiceChip(
+                    label: const Text('Team'),
+                    selected: _isTeam,
+                    onSelected: (val) => setState(() => _isTeam = true),
+                    selectedColor: AppColors.primaryYellow.withValues(alpha: 0.2),
+                    showCheckmark: false,
+                    labelStyle: TextStyle(
+                      color: _isTeam ? AppColors.primaryYellow : AppColors.mutedText,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 15),
 
             // Note Title
             Padding(
@@ -265,7 +301,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
                           color: _selectedColorIndex == index
-                              ? Colors.blueAccent
+                              ? AppColors.primaryYellow
                               : (_noteColors[index] == Colors.white
                                     ? Colors.grey.shade300
                                     : Colors.transparent),
@@ -283,7 +319,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                           ? Icon(
                               Icons.check,
                               color: _noteColors[index] == Colors.white
-                                  ? Colors.blueAccent
+                                  ? AppColors.primaryYellow
                                   : Colors.white,
                               size: 20,
                             )

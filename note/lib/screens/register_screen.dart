@@ -82,12 +82,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.lightBackground,
+      backgroundColor: AppColors.creamBackground,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: AppColors.blue),
+          icon: const Icon(Icons.arrow_back_ios, color: AppColors.primaryYellow),
           onPressed: () => Navigator.pop(context),
         ),
       ),
@@ -104,7 +104,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     Icon(
                       Icons.account_circle_rounded,
                       size: 80,
-                      color: AppColors.blue,
+                      color: AppColors.primaryYellow,
                     ),
                     const SizedBox(height: 8),
                     const Text(
@@ -150,7 +150,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       child: ElevatedButton(
                         onPressed: _isLoading ? null : _register,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.blue,
+                          backgroundColor: AppColors.primaryYellow,
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
@@ -190,7 +190,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           child: const Text(
                             'Login',
                             style: TextStyle(
-                              color: AppColors.blue,
+                              color: AppColors.primaryYellow,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -233,7 +233,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.blue, width: 1),
+          borderSide: const BorderSide(color: AppColors.primaryYellow, width: 1),
         ),
       ),
     );

@@ -8,6 +8,7 @@ class Note {
   final String userId;
   final DateTime createdAt;
   final bool isPinned;
+  final bool isTeam;
 
   Note({
     required this.id,
@@ -17,6 +18,7 @@ class Note {
     required this.userId,
     required this.createdAt,
     this.isPinned = false,
+    this.isTeam = false,
   });
 
   factory Note.fromMap(Map<String, dynamic> data, String documentId) {
@@ -45,6 +47,7 @@ class Note {
       userId: data['userId'] ?? '',
       createdAt: createdAt,
       isPinned: data['isPinned'] ?? false,
+      isTeam: data['isTeam'] ?? false,
     );
   }
 
@@ -56,6 +59,7 @@ class Note {
       'userId': userId,
       'createdAt': Timestamp.fromDate(createdAt),
       'isPinned': isPinned,
+      'isTeam': isTeam,
     };
   }
 }
