@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:note/screens/profile.dart';
 import 'firebase_options.dart';
 import 'authProvider/auth_wrapper.dart';
 import 'constants/app_colors.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   try {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
@@ -34,7 +35,8 @@ class MyApp extends StatelessWidget {
           primary: AppColors.primaryYellow,
           surface: AppColors.creamBackground,
         ),
-        fontFamily: 'Roboto', // Fallback, flutter defaults to Roboto/San Francisco
+        fontFamily:
+            'Roboto', // Fallback, flutter defaults to Roboto/San Francisco
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             backgroundColor: AppColors.primaryYellow,
@@ -60,7 +62,10 @@ class MyApp extends StatelessWidget {
             borderRadius: BorderRadius.circular(16),
             borderSide: BorderSide.none,
           ),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 20,
+            vertical: 16,
+          ),
         ),
       ),
       home: const AuthWrapper(),
