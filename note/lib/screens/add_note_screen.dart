@@ -165,7 +165,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
               ),
             ),
             const SizedBox(height: 10),
-            
+
             // Team vs Single Toggle
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -175,10 +175,14 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                     label: const Text('Single'),
                     selected: !_isTeam,
                     onSelected: (val) => setState(() => _isTeam = false),
-                    selectedColor: AppColors.primaryYellow.withValues(alpha: 0.2),
+                    selectedColor: AppColors.primaryYellow.withValues(
+                      alpha: 0.2,
+                    ),
                     showCheckmark: false,
                     labelStyle: TextStyle(
-                      color: !_isTeam ? AppColors.primaryYellow : AppColors.mutedText,
+                      color: !_isTeam
+                          ? AppColors.primaryYellow
+                          : AppColors.mutedText,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -187,10 +191,14 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                     label: const Text('Team'),
                     selected: _isTeam,
                     onSelected: (val) => setState(() => _isTeam = true),
-                    selectedColor: AppColors.primaryYellow.withValues(alpha: 0.2),
+                    selectedColor: AppColors.primaryYellow.withValues(
+                      alpha: 0.2,
+                    ),
                     showCheckmark: false,
                     labelStyle: TextStyle(
-                      color: _isTeam ? AppColors.primaryYellow : AppColors.mutedText,
+                      color: _isTeam
+                          ? AppColors.primaryYellow
+                          : AppColors.mutedText,
                       fontWeight: FontWeight.bold,
                     ),
                   ),

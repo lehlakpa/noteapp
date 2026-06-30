@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:note/screens/profile1.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:note/screens/profile.dart';
 import 'firebase_options.dart';
 import 'authProvider/auth_wrapper.dart';
 import 'constants/app_colors.dart';
+
+// void main() async {
+//   runApp(MaterialApp(home: Profile1()));
+// }
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
