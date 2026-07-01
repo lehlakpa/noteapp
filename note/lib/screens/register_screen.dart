@@ -87,7 +87,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: AppColors.primaryYellow),
+          icon: const Icon(
+            Icons.arrow_back_ios,
+            color: AppColors.primaryYellow,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
       ),
@@ -118,7 +121,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     const SizedBox(height: 8),
                     const Text(
-                      'Start tracking your expenses today',
+                      'Sign in to continue your journey with Pookie',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: AppColors.mutedText,
@@ -233,7 +236,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.primaryYellow, width: 1),
+          borderSide: const BorderSide(
+            color: AppColors.primaryYellow,
+            width: 1,
+          ),
         ),
       ),
     );

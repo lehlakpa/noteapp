@@ -79,7 +79,7 @@ class _LoginScreenState extends State<LoginScreen> {
       if (!mounted) return;
       CustomNotification.show(
         context,
-        message: 'Login successful',
+        message: 'Login successfully',
         isError: false,
       );
 
@@ -174,13 +174,13 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Column(
                   children: [
                     Image.asset(
-                      "assets/images/notelogo.png",
+                      "assets/images/pookie.png",
                       height: 100,
                       width: 100,
                     ),
                     const SizedBox(height: 8),
                     const Text(
-                      'Welcome Back',
+                      'Get Started',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 32,
@@ -190,7 +190,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     const SizedBox(height: 4),
                     const Text(
-                      'Log in to your account',
+                      'Log in to continue creating unforgettable moments',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: AppColors.mutedText,
@@ -312,7 +312,10 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.primaryYellow, width: 1),
+          borderSide: const BorderSide(
+            color: AppColors.primaryYellow,
+            width: 1,
+          ),
         ),
       ),
     );

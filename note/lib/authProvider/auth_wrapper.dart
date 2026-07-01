@@ -60,7 +60,7 @@ class _AuthWrapperState extends State<AuthWrapper> {
       return Scaffold(
         backgroundColor: Colors.white,
         body: Center(
-          child: Image.asset("assets/images/notelogo.png", width: 150),
+          child: Image.asset("assets/images/pookie.png", width: 150),
         ),
       );
     }

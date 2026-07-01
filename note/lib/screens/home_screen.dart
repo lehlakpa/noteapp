@@ -72,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Container(
               padding: const EdgeInsets.all(8),
               child: Image.asset(
-                "assets/images/notelogo.png",
+                "assets/images/pookie.png",
                 height: 60,
                 width: 60,
               ),
